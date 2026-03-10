@@ -9,7 +9,6 @@ _bankBranches = {
             length = 4.0,
             width = 14.8,
             heading = 340,
-            --debugPoly=true,
             minZ = 105.28,
             maxZ = 108.28
         },
@@ -114,7 +113,6 @@ _bankBranches = {
             length = 4.6,
             width = 1.6,
             heading = 315,
-            --debugPoly=true,
             minZ = 30.63,
             maxZ = 32.63
         },
@@ -128,7 +126,6 @@ _bankBranches = {
             length = 2.4,
             width = 5.7,
             heading = 315,
-            --debugPoly=true,
             minZ = 28.9,
             maxZ = 30.9
         },
@@ -142,7 +139,6 @@ _bankBranches = {
             length = 2.4,
             width = 8.8,
             heading = 306,
-            --debugPoly=true,
             minZ = 15.78,
             maxZ = 17.98
         },

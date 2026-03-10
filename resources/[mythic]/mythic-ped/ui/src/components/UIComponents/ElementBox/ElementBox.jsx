@@ -3,7 +3,7 @@ import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles((theme) => ({
 	inner: {
-		background: theme.palette.secondary.main,
+		// background: theme.palette.secondary.main,
 		paddingBottom: 10,
 		overflow: 'hidden',
 	},
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 			borderBottom: `46px solid ${theme.palette.primary.dark}`,
 			borderRight: '21px solid transparent',
 		},
+		userSelect: 'none',
 	},
 }));
 

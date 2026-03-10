@@ -32,13 +32,13 @@ function RegisterCallbacks()
 								end
 								_plants[pid].plant.water = _plants[pid].plant.water + amt
 							else
-								Execute:Client(source, "Notification", "Error", "You Don't Have Water")
+								Execute:Client(source, "Notification", "Error", "You do not have any water available.")
 							end
 						else
-							Execute:Client(source, "Notification", "Error", "Plant Is Already Watered")
+							Execute:Client(source, "Notification", "Error", "This plant is already fully watered.")
 						end
 					else
-						Execute:Client(source, "Notification", "Error", "Invalid Plant")
+						Execute:Client(source, "Notification", "Error", "This plant is no longer valid.")
 					end
 				end
 			else
@@ -69,13 +69,13 @@ function RegisterCallbacks()
 									value = Config.Fertilizer[data.type].value,
 								}
 							else
-								Execute:Client(source, "Notification", "Error", "You Don't Have Fertilizer")
+								Execute:Client(source, "Notification", "Error", "You do not have the required fertilizer.")
 							end
 						else
-							Execute:Client(source, "Notification", "Error", "Plant Is Already Fertilized")
+							Execute:Client(source, "Notification", "Error", "This plant has already been fertilized.")
 						end
 					else
-						Execute:Client(source, "Notification", "Error", "Invalid Plant")
+						Execute:Client(source, "Notification", "Error", "This plant is no longer valid.")
 					end
 				end
 			else
@@ -168,7 +168,8 @@ function RegisterCallbacks()
 								char:GetData("SID")
 							)
 						)
-						Execute:Client(source, "Notification", "Success", "Plant Has Been Destroyed")
+
+						Execute:Client(source, "Notification", "Success", "The plant has been destroyed.")
 					else
 						cb(nil)
 					end
@@ -199,7 +200,8 @@ function RegisterCallbacks()
 								char:GetData("SID")
 							)
 						)
-						Execute:Client(source, "Notification", "Success", "Plant Has Been Destroyed")
+
+						Execute:Client(source, "Notification", "Success", "The plant has been destroyed.")
 					else
 						cb(nil)
 					end
@@ -245,7 +247,6 @@ function RegisterCallbacks()
 						giving2 = "fertilizer_potassium"
 					end
 
-					--Reputation.Modify:Add(source, "weed", 1000)
 					Inventory:AddItem(char:GetData("SID"), giving, 2, {}, 1)
 					Inventory:AddItem(char:GetData("SID"), giving2, 2, {}, 1)
 				else
@@ -258,7 +259,7 @@ function RegisterCallbacks()
 							char:GetData("SID")
 						)
 					)
-					Execute:Client(source, "Notification", "Error", "Dont Have Enough Cash")
+					Execute:Client(source, "Notification", "Error", "You do not have enough cash to complete this purchase.")
 					cb(false)
 				end
 			else
@@ -272,9 +273,9 @@ function RegisterCallbacks()
 					)
 				)
 				if _packagesAvailable > 0 then
-					Execute:Client(source, "Notification", "Error", "You've Already Bought A Package")
+					Execute:Client(source, "Notification", "Error", "You have already purchased a package.")
 				else
-					Execute:Client(source, "Notification", "Error", "No Packages Available")
+					Execute:Client(source, "Notification", "Error", "No packages are currently available.")
 				end
 				cb(false)
 			end

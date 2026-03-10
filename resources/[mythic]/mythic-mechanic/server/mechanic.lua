@@ -1,4 +1,4 @@
-AddEventHandler("Apartments:Shared:DependencyUpdate", RetrieveComponents)
+AddEventHandler("Mechanic:Shared:DependencyUpdate", RetrieveComponents)
 function RetrieveComponents()
 	Database = exports["mythic-base"]:FetchComponent("Database")
 	Callbacks = exports["mythic-base"]:FetchComponent("Callbacks")

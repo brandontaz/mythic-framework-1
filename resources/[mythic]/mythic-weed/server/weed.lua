@@ -82,42 +82,60 @@ end
 
 WEED = {
 	Planting = {
-		Set = function(self, id, isUpdate)
-			if _plants[id] ~= nil then
-				local stage = getStageByPct(_plants[id].plant.growth)
-				_plants[id].stage = stage
+        Set = function(self, id, isUpdate, skipEvent)
+            if _plants[id] ~= nil then
+                local stage = getStageByPct(_plants[id].plant.growth)
+                _plants[id].stage = stage
 
-				TriggerClientEvent('Weed:Client:Objects:Update', -1, id, _plants[id], isUpdate)
-			end
-		end,
+                if skipEvent then
+                    return { id = id, plant = _plants[id], update = isUpdate }
+                else
+                    TriggerClientEvent("Weed:Client:Objects:Update", -1, id, _plants[id], isUpdate)
+                end
+            end
+        end,
 		Delete = function(self, id, skipRemove)
-			if _plants[id] ~= nil then
-				_plants[id] = nil
-				TriggerClientEvent('Weed:Client:Objects:Delete', -1, id)
-			end
+            if _plants[id] ~= nil then
+                local plant = _plants[id].plant
+                _plants[id] = nil
+
+                if plant and plant._id then
+                    exports.oxmysql:execute(
+                        "DELETE FROM weed_plants WHERE id = ?",
+                        { plant._id }
+                    )
+                end
+
+                TriggerClientEvent("Weed:Client:Objects:Delete", -1, id)
+            end
 		end,
-		Create = function(self, isMale, location, material)
-			local p = promise.new()
-			local weed = {
-				isMale = isMale,
-				location = location,
-				growth = 0,
-				output = 1,
-				material = material,
-				planted = os.time(),
-				water = 100.0,
-			}
-			Database.Game:insertOne({
-				collection = "weed",
-				document = weed,
-			}, function(success, results, insertedIds)
-				if not success then
-					return p:resolve(nil)
-				end
-				weed._id = insertedIds[1]
-				return p:resolve(weed)
-			end)
-			return Citizen.Await(p)
-		end,
+        Create = function(self, isMale, location, material)
+            local p = promise.new()
+
+            local weed = {
+                isMale = isMale,
+                location = location,
+                growth = 0,
+                output = 1,
+                material = material,
+                planted = os.time(),
+                water = 100.0,
+            }
+
+			exports.oxmysql:insert(
+                "INSERT INTO weed_plants (data) VALUES (?)",
+                { json.encode(weed) },
+                function(insertId)
+                    if not insertId then
+                        return p:resolve(nil)
+                    end
+
+                    weed._id = insertId
+                    return p:resolve(weed)
+                end
+            )
+
+            return Citizen.Await(p)
+        end,
 	},
 }

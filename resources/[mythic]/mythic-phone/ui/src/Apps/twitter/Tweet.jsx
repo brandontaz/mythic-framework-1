@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Avatar, IconButton } from '@material-ui/core';
+import { Grid, Avatar, IconButton, Tooltip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import processString from 'react-process-string';
@@ -26,10 +26,23 @@ const useStyles = makeStyles((theme) => ({
 		color: theme.palette.primary.main,
 		fontSize: 16,
 	},
+	verification: {
+		marginLeft: 5,
+		color: '#00aced',
+
+		'&.business': {
+			color: '#eac93e',
+		},
+
+		'&.government': {
+			color: '#829aab',
+		}
+	},
 	date: {
 		color: theme.palette.text.alt,
 		fontSize: 12,
-		marginLeft: 5,
+		marginRight: 15,
+		float: 'right',
 	},
 	avatar: {
 		width: 60,
@@ -168,6 +181,9 @@ export default ({ tweet, rtcount, onReply, onRetweet }) => {
 			<Grid item xs={10}>
 				<div>
 					<span className={classes.author}>{tweet.author.name}</span>
+					{tweet.verified && <span className={`${classes.verification} ${tweet.verified}`}>
+						<FontAwesomeIcon icon={['fas', 'circle-check']} />
+					</span>}
 					<span className={classes.date}>
 						<Moment date={tweet.time} interval={60000} fromNow />
 					</span>

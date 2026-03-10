@@ -114,19 +114,35 @@ end)
 
 RegisterNUICallback('CreateCharacter', function(data, cb)
     cb('ok')
+    FadeOutWithTimeout(500)
     Callbacks:ServerCallback('Characters:CreateCharacter', data, function(character)
-        if character ~= nil then
-            SendNUIMessage({
-                type = 'CREATE_CHARACTER',
-                data = { character = character }
-            })
-        end
+        if not character then return end
+        SendNUIMessage({ type = 'LOADING_SHOW', date = { message = 'test' } })
+        SendNUIMessage({ type= "APP_HIDE" })
 
-        SendNUIMessage({
-            type = 'SET_STATE',
-            data = { state = 'STATE_CHARACTERS' }
-        })
-        SendNUIMessage({ type = 'LOADING_HIDE' })
+        Callbacks:ServerCallback('Characters:GetSpawnPoints', character.ID, function(spawns)
+            if spawns and #spawns > 0 then
+                local spawn = Config.NewSpawn
+                Callbacks:ServerCallback('Characters:GetCharacterData', character.ID, function(cData)
+                    cData.spawn = spawn
+                    TriggerEvent('Characters:Client:SetData', -1, cData, function()
+                        exports['mythic-base']:FetchComponent('Spawn'):SpawnToWorld(cData, function()
+                            LocalPlayer.state.canUsePhone = true
+                            if spawn.event then
+                                Callbacks:ServerCallback(spawn.event, spawn, function()
+                                    LocalPlayer.state.Char = cData.ID
+                                    LocalPlayer.state:set('SID', cData.SID, true)
+                                end)
+                            else
+                                LocalPlayer.state:set('SID', cData.SID, true)
+                                TriggerServerEvent('Characters:Server:Spawning')
+                            end
+                        end)
+                    end)
+                end)
+                SendNUIMessage({ type = 'LOADING_HIDE' })
+            end
+        end)
     end)
 end)
 
@@ -167,6 +183,7 @@ end)
 
 RegisterNUICallback('PlayCharacter', function(data, cb)
     cb('ok')
+    FadeOutWithTimeout(500)
     Callbacks:ServerCallback('Characters:GetCharacterData', data.character.ID, function(cData)
         cData.spawn = data.spawn
         TriggerEvent('Characters:Client:SetData', -1, cData, function()

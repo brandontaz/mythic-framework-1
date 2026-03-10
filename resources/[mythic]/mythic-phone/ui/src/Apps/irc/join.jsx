@@ -144,7 +144,7 @@ const useStyles = makeStyles((theme) => ({
 		padding: 20,
 		fontSize: 12,
 		display: 'block',
-		fontFamily: 'monospace',
+		fontFamily: 'Oswald',
 		color: theme.palette.text.main,
 	},
 }));

@@ -3,8 +3,8 @@ import { connect, useSelector } from 'react-redux';
 import Wrapper from '../UIComponents/Wrapper/Wrapper';
 import Component from '../PedComponents/Component/Component';
 
-export default connect()(props => {
-	const ped = useSelector(state => state.app.ped);
+export default connect()((props) => {
+	const ped = useSelector((state) => state.app.ped);
 
 	return (
 		<Wrapper>
@@ -17,6 +17,11 @@ export default connect()(props => {
 				label={'Under Shirt'}
 				component={ped.customization.components.undershirt}
 				name={'undershirt'}
+			/>
+			<Component
+				label={'Arms'}
+				component={ped.customization.components.torso}
+				name={'torso'}
 			/>
 			<Component
 				label={'Vest'}

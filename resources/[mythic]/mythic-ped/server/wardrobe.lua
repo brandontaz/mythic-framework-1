@@ -43,11 +43,51 @@ function RegisterChatCommands()
 	end, {
 		help = "Test Notification",
 	})
+	Chat:RegisterAdminCommand("ped", function(source, args, rawCommand)
+		local shopType = 0
+		local targetChar
+
+		if args[1] and tonumber(args[1]) ~= nil then
+			shopType = tonumber(args[1])
+		end
+
+		if args[2] and tonumber(args[2]) ~= nil then
+			targetChar = Fetch:SID(tonumber(args[2]))
+		else
+			targetChar = Fetch:Source(source):GetData("Character")
+		end
+
+		if targetChar ~= nil then
+			Execute:Client(
+				source,
+				"Notification",
+				"Info",
+				string.format("Ped Menu given to State ID: %s", targetChar:GetData("SID")),
+				2000
+			)
+
+			TriggerClientEvent("Peds:Customization:Client:AdminAbuse", targetChar:GetData("Source"), shopType)
+		else
+			Execute:Client(source, "Notification", "Error", "Player is not online.", 2000)
+		end
+	end, {
+		help = "Show Ped Menu for Player",
+		params = {
+			{
+				name = "Shop Type",
+				help = "0 = Clothing (default), 1 = Surgery, 2 = Barber, 3 = Tattoo",
+			},
+			{
+				name = "State ID (optional)",
+				help = "Player to give the menu to",
+			},
+		},
+	})
 	Chat:RegisterAdminCommand("clearprops", function(source, args, rawCommand)
 		TriggerClientEvent("Ped:Client:Clearprops", source)
-	  end, {
+	end, {
 		help = "Removes all the props attached to the entity",
-	  })
+	})
 end
 
 function RegisterWardrobeMiddleware()

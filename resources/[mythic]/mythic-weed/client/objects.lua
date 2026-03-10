@@ -62,7 +62,7 @@ RegisterNetEvent('Weed:Client:Objects:Init', function(plants)
             end
         end)
     else
-        Logger:Error('Weed', 'Failed to Load Weed Objects')
+        Logger:Error('Weed', 'Unable to load weed plant objects.')
     end
 end)
 
@@ -72,6 +72,17 @@ RegisterNetEvent('Weed:Client:Objects:Update', function(plantId, data, isUpdate)
     if isUpdate and _spawnedPlants[plantId] then
         DeleteEntity(_spawnedPlants[plantId])
         _spawnedPlants[plantId] = nil
+    end
+end)
+
+RegisterNetEvent('Weed:Client:Objects:UpdateMany', function(data)
+    for k, v in ipairs(data) do
+        _activePlants[v.id] = v.plant
+    
+        if v.update and _spawnedPlants[v.id] then
+            DeleteEntity(_spawnedPlants[v.id])
+            _spawnedPlants[v.id] = nil
+        end
     end
 end)
 

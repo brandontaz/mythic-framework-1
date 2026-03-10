@@ -82,6 +82,18 @@ const useStyles = makeStyles((theme) => ({
 		lineHeight: '45px',
 		height: 78,
 	},
+	verification: {
+		marginRight: 5,
+		color: '#00aced',
+
+		'&.business': {
+			color: '#eac93e',
+		},
+
+		'&.government': {
+			color: '#829aab',
+		}
+	},
 }));
 
 export default (props) => {
@@ -150,7 +162,7 @@ export default (props) => {
 							type="submit"
 							className={classes.headerAction}
 						>
-							<FontAwesomeIcon icon={['fas', 'floppy-disk']} />
+							<FontAwesomeIcon icon={['fas', 'floppy-disks']} />
 						</IconButton>
 					</Grid>
 				</Grid>
@@ -196,6 +208,19 @@ export default (props) => {
 							value={profile.avatar}
 						/>
 					</div>
+					<h4>Types of Verification Badges</h4>
+					<p>
+						<span className={`${classes.verification} business`}>
+							<FontAwesomeIcon icon={['fas', 'circle-check']} />
+						</span>
+						Official Business Account
+					</p>
+					<p>
+						<span className={`${classes.verification} government`}>
+							<FontAwesomeIcon icon={['fas', 'circle-check']} />
+						</span>
+						Official Government Account
+					</p>
 				</Paper>
 			</div>
 		</form>

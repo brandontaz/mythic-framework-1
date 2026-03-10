@@ -66,7 +66,7 @@ function RegisterCallbacks()
 				Progress:Progress({
 					name = "plant_weed",
 					duration = 15000,
-					label = "Planting",
+					label = "Planting Seed",
 					canCancel = true,
 					controlDisables = {
 						disableMovement = true,

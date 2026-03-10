@@ -24,9 +24,9 @@ Materials = {
 }
 
 Plants = {
-	{
-		model = GetHashKey("bkr_prop_weed_01_small_01c"),
-		offset = -0.4,
+    {
+		model = `bzzz_plants_weed_green_small`,
+		offset = 0.0,
 		harvestable = false,
 		targeting = {
 			{
@@ -56,8 +56,8 @@ Plants = {
 		},
 	},
 	{
-		model = GetHashKey("bkr_prop_weed_01_small_01b"),
-		offset = -0.4,
+		model = `bzzz_plants_weed_green_medium`,
+		offset = 0.0,
 		harvestable = false,
 		targeting = {
 			{
@@ -87,8 +87,8 @@ Plants = {
 		},
 	},
 	{
-		model = GetHashKey("bkr_prop_weed_01_small_01a"),
-		offset = -0.4,
+		model = `bzzz_plants_weed_green_big`,
+		offset = 0.0,
 		harvestable = false,
 		targeting = {
 			{
@@ -117,81 +117,10 @@ Plants = {
 			},
 		},
 	},
-	{
-		model = GetHashKey("bkr_prop_weed_med_01a"),
-		offset = -0.4,
+    {
+		model = `bzzz_plants_weed_green_bud`,
+		offset = 0.0,
 		harvestable = false,
-		targeting = {
-			{
-				icon = "magnifying-glass",
-				text = "Check",
-				event = "Weed:Client:Check",
-				data = {},
-				isEnabled = function(data, entity)
-					return GetWeedPlant(entity.entity)
-				end,
-			},
-			{
-				icon = "hand-scissors",
-				text = "Destroy Plant",
-				event = "Weed:Client:PDDestroy",
-				jobPerms = {
-					{
-						job = "police",
-						reqDuty = true,
-					}
-				},
-				data = {},
-				isEnabled = function(data, entity)
-					return GetWeedPlant(entity.entity)
-				end,
-			},
-		},
-	},
-	{
-		model = GetHashKey("bkr_prop_weed_med_01b"),
-		offset = -0.4,
-		harvestable = true,
-		targeting = {
-			{
-				icon = "magnifying-glass",
-				text = "Check",
-				event = "Weed:Client:Check",
-				data = {},
-				isEnabled = function(data, entity)
-					return GetWeedPlant(entity.entity)
-				end,
-			},
-			{
-				icon = "money-bill",
-				text = "Harvest",
-				event = "Weed:Client:Harvest",
-				data = {},
-				isEnabled = function(data, entity)
-					return GetWeedPlant(entity.entity)
-				end,
-			},
-			{
-				icon = "hand-scissors",
-				text = "Destroy Plant",
-				event = "Weed:Client:PDDestroy",
-				jobs = { "police" },
-				jobPerms = {
-					{
-						job = "police",
-						reqDuty = true,
-					}
-				},
-				isEnabled = function(data, entity)
-					return GetWeedPlant(entity.entity)
-				end,
-			},
-		},
-	},
-	{
-		model = GetHashKey("bkr_prop_weed_lrg_01a"),
-		offset = -0.4,
-		harvestable = true,
 		targeting = {
 			{
 				icon = "magnifying-glass",
@@ -229,8 +158,8 @@ Plants = {
 		},
 	},
 	{
-		model = GetHashKey("bkr_prop_weed_lrg_01b"),
-		offset = -0.4,
+		model = `bzzz_plants_weed_green_bud_big`,
+		offset = 0.0,
 		harvestable = true,
 		targeting = {
 			{
@@ -268,56 +197,4 @@ Plants = {
 			},
 		},
 	},
-	-- {
-	-- 	model = GetHashKey("prop_weed_02"),
-	-- 	offset = -0.4,
-	-- 	targeting = {
-	-- 		{
-	-- 			icon = "magnifying-glass",
-	-- 			text = "Check",
-	-- 			event = "Weed:Client:Check",
-	-- 			data = {},
-	-- 			isEnabled = function(data, entity)
-	-- 				return GetWeedPlant(entity.entity)
-	-- 			end,
-	-- 		},
-	-- 		{
-	-- 			icon = "hand-scissors",
-	-- 			text = "Confiscate",
-	-- 			event = "Weed:Client:Confiscate",
-	-- 			jobs = { "police" },
-	-- 			jobDuty = true,
-	-- 			data = {},
-	-- 			isEnabled = function(data, entity)
-	-- 				return GetWeedPlant(entity.entity)
-	-- 			end,
-	-- 		},
-	-- 	},
-	-- },
-	-- {
-	-- 	model = GetHashKey("prop_weed_01"),
-	-- 	offset = -0.4,
-	-- 	targeting = {
-	-- 		{
-	-- 			icon = "magnifying-glass",
-	-- 			text = "Check",
-	-- 			event = "Weed:Client:Check",
-	-- 			data = {},
-	-- 			isEnabled = function(data, entity)
-	-- 				return GetWeedPlant(entity.entity)
-	-- 			end,
-	-- 		},
-	-- 		{
-	-- 			icon = "hand-scissors",
-	-- 			text = "Confiscate",
-	-- 			event = "Weed:Client:Confiscate",
-	-- 			jobs = { "police" },
-	-- 			jobDuty = true,
-	-- 			data = {},
-	-- 			isEnabled = function(data, entity)
-	-- 				return GetWeedPlant(entity.entity)
-	-- 			end,
-	-- 		},
-	-- 	},
-	-- },
 }

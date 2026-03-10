@@ -286,6 +286,7 @@ function RetrieveComponents()
 	Fetch = exports["mythic-base"]:FetchComponent("Fetch")
 	Callbacks = exports["mythic-base"]:FetchComponent("Callbacks")
 	Database = exports["mythic-base"]:FetchComponent("Database")
+	Execute = exports["mythic-base"]:FetchComponent("Execute")
 	Locations = exports["mythic-base"]:FetchComponent("Locations")
 	Routing = exports["mythic-base"]:FetchComponent("Routing")
 	Logger = exports["mythic-base"]:FetchComponent("Logger")
@@ -299,6 +300,7 @@ AddEventHandler("Core:Shared:Ready", function()
 		"Fetch",
 		"Callbacks",
 		"Database",
+		"Execute",
 		"Locations",
 		"Routing",
 		"Logger",

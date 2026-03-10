@@ -8,7 +8,7 @@ module.exports = options => ({
     entry: options.entry,
     output: {
         path: path.resolve(process.cwd(), 'dist'),
-        publicPath: options.mode !== 'production' ? '/' : '/ui/dist/',
+        publicPath: options.mode !== 'production' ? '/' : './',
         filename: '[name].js',
     },
     performance: {
@@ -22,7 +22,11 @@ module.exports = options => ({
         minimize: true,
         minimizer: [
             new TerserPlugin({
+                parallel: false,
                 terserOptions: {
+                    compress: {
+                        passes: 1,
+                    },
                     format: {
                         comments: false,
                     },
@@ -68,33 +72,27 @@ module.exports = options => ({
             },
             {
                 test: /\.(eot|otf|ttf|woff|woff2)$/,
-                use: 'file-loader',
+                type: 'asset/resource',
             },
             {
                 test: /\.svg$/,
-                use: [
-                    {
-                        loader: 'svg-url-loader',
-                        options: {
-                            // Inline files smaller than 10 kB
-                            limit: 10 * 1024,
-                            noquotes: true,
-                        },
+                type: 'asset',
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 10 * 1024,
                     },
-                ],
-            },
-            {
-                test: /\.(jpg|png|webp|gif|gifv)$/,
-                use: {
-                    loader: 'url-loader',
                 },
             },
             {
+                test: /\.(jpg|png|webp|gif|gifv)$/,
+                type: 'asset/inline',
+            },
+            {
                 test: /\.(mp4|webm)$/,
-                use: {
-                    loader: 'url-loader',
-                    options: {
-                        limit: 10000,
+                type: 'asset',
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 10000,
                     },
                 },
             },

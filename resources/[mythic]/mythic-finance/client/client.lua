@@ -155,6 +155,7 @@ RegisterNUICallback("Close", function(data, cb)
 	end
 
 	inBank = false
+	cb('OK')
 end)
 
 RegisterNetEvent("Finance:Client:OpenUI")

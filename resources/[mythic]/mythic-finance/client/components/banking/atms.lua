@@ -5,6 +5,12 @@ local atmObjects = {
     `prop_fleeca_atm`,
 }
 
+local ATM_BRAND_BY_MODEL = {
+    [`prop_atm_01`]      = 'maze',
+    [`prop_atm_02`]      = 'maze',
+    [`prop_atm_03`]      = 'maze',
+}
+
 local atmPolys = {
     {
         center = vector3(240.93, 217.63, 106.28),
@@ -70,7 +76,7 @@ function AddBankingATMs()
                 text = "Use ATM",
                 icon = 'dollar-sign',
                 event = "Banking:Client:StartOpenATM",
-                data = {},
+                data = { brand = brand },
                 minDist = 3.0,
             },
         }, 3.0)
@@ -89,7 +95,7 @@ function AddBankingATMs()
                     text = "Use ATM",
                     icon = 'dollar-sign',
                     event = "Banking:Client:StartOpenATM",
-                    data = {},
+                    data = { brand = v.brand },
                     minDist = 3.0,
                 },
             },
@@ -100,6 +106,19 @@ function AddBankingATMs()
 end
 
 AddEventHandler('Banking:Client:StartOpenATM', function(entityData)
+    local passedBrand = entityData and entityData.data and entityData.data.brand or nil
+
+    local entity = entityData and entityData.entity or nil
+    local model  = nil
+    if entity and DoesEntityExist(entity) then
+        model = GetEntityModel(entity)
+    elseif entityData and entityData.model then
+        model = entityData.model
+    end
+
+    local modelBrand = model and ATM_BRAND_BY_MODEL[model] or nil
+    local brand = passedBrand or modelBrand or 'fleeca'
+
     Progress:Progress({
         name = "atm_inserting",
         duration = 3000,
@@ -125,7 +144,7 @@ AddEventHandler('Banking:Client:StartOpenATM', function(entityData)
             SendNUIMessage({
                 type = "SET_APP",
                 data = {
-                    brand = "fleeca",
+                    brand = brand,
                     app = "ATM",
                 }
             })

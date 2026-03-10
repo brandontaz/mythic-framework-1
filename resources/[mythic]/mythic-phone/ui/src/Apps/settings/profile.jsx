@@ -96,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	sectionHeader: {
 		fontSize: 24,
-		fontFamily: 'Aclonica',
+		fontFamily: 'Oswald',
 		color: theme.palette.text.light,
 		padding: 10,
 		borderBottom: `1px solid ${theme.palette.primary.main}`,

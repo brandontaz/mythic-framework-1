@@ -37,11 +37,13 @@ AddEventHandler('Core:Shared:Ready', function()
                 while true do
                     Wait(1000 * 60 * 10)
                     if depositData.amount > 0 then
-                        Logger:Trace("Fuel", string.format("Depositing ^2$%s^7 To ^3%s^7", math.abs(depositData.amount), bankAcc))
+                        Logger:Trace("Fuel",
+                            string.format("Depositing ^2$%s^7 To ^3%s^7", math.abs(depositData.amount), bankAcc))
                         Banking.Balance:Deposit(bankAcc, math.abs(depositData.amount), {
                             type = 'deposit',
                             title = 'Fuel Services',
-                            description = string.format("Payment For Fuel Services For %s Vehicles", depositData.transactions),
+                            description = string.format("Payment For Fuel Services For %s Vehicles",
+                                depositData.transactions),
                             data = {},
                         }, true)
                         depositData = {
@@ -56,7 +58,9 @@ AddEventHandler('Core:Shared:Ready', function()
 
         Wait(2000)
         local f = Banking.Accounts:GetOrganization("dgang")
-        bankAcc = f.Account
+        if f then
+            bankAcc = f.Account
+        end
     end)
 end)
 

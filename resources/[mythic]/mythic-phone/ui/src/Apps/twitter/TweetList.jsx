@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TextField, AppBar, IconButton, Grid, Pagination } from '@material-ui/core';
+import { TextField, AppBar, IconButton, Grid, Pagination, SpeedDial, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -61,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
 		padding: 15,
 		lineHeight: '45px',
 		height: 78,
+		textAlign: 'center'
 	},
 }));
 
@@ -169,19 +170,8 @@ export default (props) => {
 		<div className={classes.wrapper}>
 			<div className={classes.inner}>
 				<AppBar position="static" className={classes.header}>
-					<Grid container>
-						<Grid item xs={8} style={{ lineHeight: '50px' }}>
-							Twitter
-						</Grid>
-						<Grid item xs={4} style={{ textAlign: 'right' }}>
-							<IconButton
-								onClick={() => setOpen(true)}
-								disabled={player.Alias.twitter == null}
-								className={classes.headerAction}
-							>
-								<FontAwesomeIcon icon={['fas', 'plus']} />
-							</IconButton>
-						</Grid>
+					<Grid item xs={16} style={{ lineHeight: '50px' }}>
+						<FontAwesomeIcon style={{ fontSize: 50 }} icon={'fa-brands fa-twitter'} />
 					</Grid>
 				</AppBar>
 				<div className={classes.tweetlist}>
@@ -204,16 +194,26 @@ export default (props) => {
 								/>
 							);
 						})}
+
+					<Fab
+						color="primary"
+						style={{ position: 'absolute', right: 20, bottom: 20 }}
+						onClick={() => setOpen(true)}
+						disabled={player.Alias.twitter == null}
+					>
+						<FontAwesomeIcon icon={['fas', 'plus']} />
+					</Fab>
+
 					{pages > 1 && (
-							<Pagination
-								count={pages}
-								page={page}
-								onChange={(_, value) => setPage(value)}
-								variant="outlined"
-								color="primary"
-								style={{ padding: '5%' }}
-							/>
-						)}
+						<Pagination
+							count={pages}
+							page={page}
+							onChange={(_, value) => setPage(value)}
+							variant="outlined"
+							color="primary"
+							style={{ padding: '5%' }}
+						/>
+					)}
 				</div>
 			</div>
 			<Modal

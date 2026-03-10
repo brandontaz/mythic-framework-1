@@ -231,6 +231,18 @@ function GetPlayerSteamDecimal(source)
 	return tostring(steam64)
 end
 
+local function GetPlayerPrimaryIdentifier(src)
+    local primary = GetConvar('mythic_primary_identifier', 'license')
+
+    for _, id in ipairs(GetPlayerIdentifiers(src)) do
+        if id:sub(1, #primary + 1) == primary .. ':' then
+            return id
+        end
+    end
+
+    return nil
+end
+
 QUEUE.Connect = function(self, source, playerName, setKickReason, deferrals)
 	local identifier = nil
 
@@ -270,10 +282,13 @@ QUEUE.Connect = function(self, source, playerName, setKickReason, deferrals)
 			Wait(100)
 		end
 
-		local identifier = GetPlayerSteamDecimal(source)
+		local identifier = GetPlayerPrimaryIdentifier(source)
 
 		if not identifier then
-			deferrals.done(Config.Strings.NoIdentifier)
+			local primary = GetConvar('mythic_primary_identifier', 'license')
+			local reason = primary == 'steam' and Config.Strings.NoSteamIdentifier or Config.Strings.NoIdentifier
+
+			deferrals.done(reason)
 			CancelEvent()
 			return
 		end
@@ -463,7 +478,7 @@ end)
 RegisterServerEvent("Core:Server:SessionStarted")
 AddEventHandler("Core:Server:SessionStarted", function()
 	local src = source
-	local identifier = GetPlayerSteamDecimal(src)
+	local identifier = GetPlayerPrimaryIdentifier(src)
 	if identifier then
 		local pos, ply = Queue.Queue:Get(identifier)
 

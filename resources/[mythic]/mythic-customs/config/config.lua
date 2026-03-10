@@ -65,6 +65,7 @@ _customsConfig.cost = {
         archCover = 180,
         tank = 410,
         windows = 240,
+        lightbar = 300,
     }
 }
 
@@ -227,6 +228,7 @@ _customsConfig.bodyParts = {
     { mod = 'airFilter', id = 40, name = 'Air Filter' },
     { mod = 'struts', id = 41, name = 'Struts' },
     { mod = 'tank', id = 45, name = 'Fuel Tank' },
+    { mod = "lightbar", id = 49, name = "Lightbar" },
 }
 
 _customsConfig.windowTints = {

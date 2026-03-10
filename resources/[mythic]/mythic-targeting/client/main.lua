@@ -1,7 +1,7 @@
 local IS_SPAWNED = false
 
 TargetableObjectModels, TargetableEntities = {}, {}
-InteractionZones, InteractablePeds, InteractableModels = {}, {}, {}
+InteractionZones, InteractablePeds, InteractableGlobalPeds, InteractableModels = {}, {}, {}, {}
 
 AddEventHandler('Targeting:Shared:DependencyUpdate', RetrieveComponents)
 function RetrieveComponents()
@@ -105,6 +105,7 @@ AddEventHandler("Proxy:Shared:RegisterReady", function()
 	table.wipe(TargetableObjectModels)
 	table.wipe(TargetableEntities)
 	table.wipe(InteractablePeds)
+	table.wipe(InteractableGlobalPeds)
 	table.wipe(InteractableModels)
 	table.wipe(InteractionZones)
 	exports['mythic-base']:RegisterComponent('Targeting', TARGETING)

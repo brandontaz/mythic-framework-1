@@ -1,19 +1,21 @@
-import { applyMiddleware, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import createReducer from './reducers';
+import { applyMiddleware, createStore } from "redux";
+import { thunk } from "redux-thunk";
+import createReducer from "./reducers";
 
 export default function configureStore(initialState) {
-	const store = createStore(
-		createReducer(),
-		initialState,
-		applyMiddleware(thunk),
-	);
+  const store = createStore(
+    createReducer(),
+    initialState,
+    applyMiddleware(thunk)
+  );
 
-	if (module.hot) {
-		module.hot.accept('./reducers', () => {
-			store.replaceReducer(createReducer(store.injectedReducers));
-		});
-	}
+  // Vite HMR
+  if (import.meta.hot) {
+    import.meta.hot.accept("./reducers", (m) => {
+      const nextCreateReducer = m?.default || createReducer;
+      store.replaceReducer(nextCreateReducer());
+    });
+  }
 
-	return store;
+  return store;
 }

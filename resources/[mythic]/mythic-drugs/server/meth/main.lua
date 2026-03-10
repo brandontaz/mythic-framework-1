@@ -4,6 +4,18 @@ _inProgCooks = {}
 local bought = {}
 local _toolsForSale = {
 	{ id = 1, item = "meth_table", coin = "PLEB", price = 400, qty = 5, vpn = true },
+    { id = 2, item = "adv_meth_table", coin = "PLEB", price = 800, qty = 5, vpn = true },
+}
+
+local ingredientItems = { -- dont touch this it'll break the script
+    'acetone',
+    'battery_acid',
+    'iodine_crystals',
+    'sulfuric_acid',
+    'phosphorous',
+    'gasoline',
+    'lithium',
+    'anhydrous_ammonia',
 }
 
 _DRUGS = _DRUGS or {}
@@ -27,8 +39,8 @@ _DRUGS.Meth = {
         return MySQL.single.await('SELECT COUNT(table_id) as Count FROM placed_meth_tables WHERE table_id = ?', { tableId })?.Count or 0 > 0
     end,
     CreatePlacedTable = function(self, tableId, owner, tier, coords, heading, created)
-        local itemInfo = Inventory.Items:GetData("meth_table")
         local tableData = self:GetTable(tableId)
+        local itemInfo = Inventory.Items:GetData(tableData.tier == 1 and "meth_table" or tableData.tier == 2 and "adv_meth_table")
 
         MySQL.insert.await("INSERT INTO placed_meth_tables (table_id, owner, placed, expires, coords, heading) VALUES(?, ?, ?, ?, ?, ?)", {
             tableId,
@@ -159,7 +171,7 @@ AddEventHandler("Drugs:Server:Startup", function()
                     if Drugs.Meth:IsTablePlaced(data) then
                         local tableData = Drugs.Meth:GetTable(data)
                         if Drugs.Meth:RemovePlacedTable(data) then
-                            if Inventory:AddItem(char:GetData("SID"), "meth_table", 1, { MethTable = data }, 1, false, false, false, false, false, tableData.created, false) then
+                            if Inventory:AddItem(char:GetData("SID"), tableData.tier == 1 and "meth_table" or tableData.tier == 2 and "adv_meth_table", 1, { MethTable = data }, 1, false, false, false, false, false, tableData.created, false) then
                                 cb(true)
                             else
                                 cb(false)
@@ -191,6 +203,44 @@ AddEventHandler("Drugs:Server:Startup", function()
                         cb(true)
                     else
                         cb(false)
+                    end
+                else
+                    cb(false)
+                end
+            else
+                cb(false)
+            end
+        else
+            cb(false)
+        end
+    end)
+
+    Callbacks:RegisterServerCallback("Drugs:Meth:Ingredients", function(source, data, cb)
+        local plyr = Fetch:Source(source)
+        if plyr ~= nil then
+            local char = plyr:GetData("Character")
+            if char ~= nil then
+                if data and _placedTables[data.tableId] ~= nil then
+                    local total = 0
+                    for index, amount in pairs(data.ingredients) do
+                        total = total + amount
+                        -- local amount = data.ingredients[index]
+                        local item = ingredientItems[index]
+
+                        if total == 0 then
+                            Execute:Client(source, "Notification", "Error", "You didn't add any ingredients")
+                            return cb(false)
+                        end
+                        if amount > 0 and not Inventory.Items:Has(char:GetData('SID'), 1, item, amount) then
+                            Execute:Client(source, "Notification", "Error", "Not enough ingredients")
+                            return cb(false)
+                        end
+                        if amount > 0 and not Inventory.Items:Remove(char:GetData('SID'), 1, item, amount) then
+                            Execute:Client(source, "Notification", "Error", "Failed to remove items")
+                            return cb(false)
+                        end
+
+                        return cb(true)
                     end
                 else
                     cb(false)

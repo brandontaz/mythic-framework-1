@@ -1,6 +1,8 @@
 fx_version 'cerulean'
 games { 'gta5' }
 lua54 'yes'
+
+version '1.0.0'
 client_script "@mythic-pwnzor/client/check.lua"
 client_scripts {
     'sh_init.lua',
@@ -11,6 +13,7 @@ client_scripts {
     'components/cl_*.lua',
 }
 
+server_script("@oxmysql/lib/MySQL.lua")
 server_scripts {
     'sh_init.lua',
     'sv_init.lua',

@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
 		padding: 20,
 		fontSize: 14,
 		display: 'block',
-		fontFamily: 'monospace',
+		fontFamily: 'Oswald',
 		color: theme.palette.text.main,
 		//wordBreak: 'break-all',
 	},

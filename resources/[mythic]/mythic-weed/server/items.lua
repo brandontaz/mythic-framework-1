@@ -2,56 +2,70 @@ function RegisterItems()
 	Inventory.Items:RegisterUse("weedseed_male", "Weed", function(source, item)
 		if GlobalState[string.format("%s:House", source)] == nil then
 			local char = Fetch:Source(source):GetData("Character")
-			Callbacks:ClientCallback(source, "Weed:PlantingAnim", {}, function(data)
-				if data.error == nil then
-					Inventory.Items:RemoveList(char:GetData("SID"), 1, { { name = "weedseed_male", count = 1 } })
-					local plant = Weed.Planting:Create(
-						true,
-						{ x = data.coords.x, y = data.coords.y, z = data.coords.z },
-						data.material
-					)
+			local veh = GetVehiclePedIsIn(GetPlayerPed(source))
+			if veh == 0 then
+				Callbacks:ClientCallback(source, "Weed:PlantingAnim", {}, function(data)
+					if data.error == nil then
+						Inventory.Items:RemoveList(char:GetData("SID"), 1, { { name = "weedseed_male", count = 1 } })
+						local plant = Weed.Planting:Create(
+							true,
+							{ x = data.coords.x, y = data.coords.y, z = data.coords.z },
+							data.material
+						)
 
-					_plants[plant._id] = {
-						plant = plant,
-					}
+						_plants[plant._id] = {
+							plant = plant,
+						}
 
-					Weed.Planting:Set(plant._id, false)
-				else
-					if data.error == 2 then
-						Execute:Client(source, "Notification", "Error", "Need Better Soil")
+						Weed.Planting:Set(plant._id, false)
+					else
+						if data.error == 2 then
+							Execute:Client(source, "Notification", "Error", "The soil quality is insufficient for planting.")
+						elseif data.error == 3 then
+							Execute:Client(source, "Notification", "Error", "You are too close to another plant.")
+						end
 					end
-				end
-			end)
+				end)
+			else
+				Execute:Client(source, "Notification", "Error", "You cannot plant while inside a vehicle.")
+			end
 		else
-			Execute:Client(source, "Notification", "Error", "Plant Needs Natural Light")
+			Execute:Client(source, "Notification", "Error", "This plant requires natural sunlight to grow.")
 		end
 	end)
 
 	Inventory.Items:RegisterUse("weedseed_female", "Weed", function(source, item)
 		if GlobalState[string.format("%s:House", source)] == nil then
 			local char = Fetch:Source(source):GetData("Character")
-			Callbacks:ClientCallback(source, "Weed:PlantingAnim", {}, function(data)
-				if data.error == nil then
-					Inventory.Items:RemoveList(char:GetData("SID"), 1, { { name = "weedseed_female", count = 1 } })
-					local plant = Weed.Planting:Create(
-						false,
-						{ x = data.coords.x, y = data.coords.y, z = data.coords.z },
-						data.material
-					)
+			local veh = GetVehiclePedIsIn(GetPlayerPed(source))
+			if veh == 0 then
+				Callbacks:ClientCallback(source, "Weed:PlantingAnim", {}, function(data)
+					if data.error == nil then
+						Inventory.Items:RemoveList(char:GetData("SID"), 1, { { name = "weedseed_female", count = 1 } })
+						local plant = Weed.Planting:Create(
+							false,
+							{ x = data.coords.x, y = data.coords.y, z = data.coords.z },
+							data.material
+						)
 
-					_plants[plant._id] = {
-						plant = plant,
-					}
+						_plants[plant._id] = {
+							plant = plant,
+						}
 
-					Weed.Planting:Set(plant._id, false)
-				else
-					if data.error == 2 then
-						Execute:Client(source, "Notification", "Error", "Need Better Soil")
+						Weed.Planting:Set(plant._id, false)
+					else
+						if data.error == 2 then
+							Execute:Client(source, "Notification", "Error", "The soil quality is insufficient for planting.")
+						elseif data.error == 3 then
+							Execute:Client(source, "Notification", "Error", "You are too close to another plant.")
+						end
 					end
-				end
-			end)
+				end)
+			else
+				Execute:Client(source, "Notification", "Error", "You cannot plant while inside a vehicle.")
+			end
 		else
-			Execute:Client(source, "Notification", "Error", "Plant Needs Natural Light")
+			Execute:Client(source, "Notification", "Error", "This plant requires natural sunlight to grow.")
 		end
 	end)
 
@@ -69,7 +83,7 @@ function RegisterItems()
 				end
 			end)
 		else
-			Execute:Client(source, "Notification", "Error", "You need bud you fucking idiot")
+			Execute:Client(source, "Notification", "Error", "You do not have the required cannabis bud.")
 		end
 	end)
 
@@ -82,7 +96,7 @@ function RegisterItems()
 			for i = 0, count do
 				table.insert(stressTicks, "3")
 			end
-			--Player(source).state.armorTicks = { "2", "2", "2", "2", "2" }
+
 			Player(source).state.stressTicks = stressTicks
 		end)
 	end)
@@ -90,17 +104,22 @@ function RegisterItems()
 	Inventory.Items:RegisterUse("weed_brick", "Weed", function(source, item)
 		local char = Fetch:Source(source):GetData("Character")
 		if Inventory.Items:Has(char:GetData("SID"), 1, "weed_brick", 1) then
-			Callbacks:ClientCallback(source, "Weed:MakingBrick", {
-				label = "Unpacking Brick",
-				time = 10,
-			}, function(success)
-				if success then
-					Inventory.Items:RemoveList(char:GetData("SID"), 1, { { name = "weed_brick", count = 1 } })
-					Inventory:AddItem(char:GetData("SID"), "weed_bud", 200, {}, 1)
-				end
-			end)
+			local veh = GetVehiclePedIsIn(GetPlayerPed(source))
+			if veh == 0 then
+				Callbacks:ClientCallback(source, "Weed:MakingBrick", {
+					label = "Unpacking Cannabis Brick",
+					time = 10,
+				}, function(success)
+					if success then
+						Inventory.Items:RemoveList(char:GetData("SID"), 1, { { name = "weed_brick", count = 1 } })
+						Inventory:AddItem(char:GetData("SID"), "weed_bud", 200, {}, 1)
+					end
+				end)
+			else
+				Execute:Client(source, "Notification", "Error", "You must exit the vehicle before packing the cannabis brick.")
+			end
 		else
-			Execute:Client(source, "Notification", "Error", "You need 200 bud you fucking idiot")
+			Execute:Client(source, "Notification", "Error", "You do not have the required cannabis brick to pack.")
 		end
 	end)
 
@@ -108,7 +127,7 @@ function RegisterItems()
 		local char = Fetch:Source(source):GetData("Character")
 		if Inventory.Items:Has(char:GetData("SID"), 1, "weed_baggy", 1) then
 			Callbacks:ClientCallback(source, "Weed:MakingBrick", {
-				label = "Removing Bud",
+				label = "Separating Cannabis Bud",
 				time = 3,
 			}, function(success)
 				if success then
@@ -117,7 +136,7 @@ function RegisterItems()
 				end
 			end)
 		else
-			Execute:Client(source, "Notification", "Error", "You need 200 bud you fucking idiot")
+			Execute:Client(source, "Notification", "Error", "You do not have the required quantity of cannabis bud.")
 		end
 	end)
 end

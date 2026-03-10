@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
 		height: 40,
 		lineHeight: '40px',
 		textAlign: 'center',
-		fontFamily: 'Aclonica',
+		fontFamily: 'Oswald',
 		width: '100%',
 		userSelect: 'none',
 		'-webkit-user-select': 'none',

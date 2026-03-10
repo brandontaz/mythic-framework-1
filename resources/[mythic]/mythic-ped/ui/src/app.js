@@ -8,6 +8,8 @@ import {
 	ThemeProvider,
 	createTheme,
 	StyledEngineProvider,
+	alpha,
+	darken,
 } from '@mui/material';
 
 import App from 'containers/App';
@@ -28,9 +30,9 @@ const render = () => {
 		},
 		palette: {
 			primary: {
-				main: '#8a0000',
-				light: '#ff2100',
-				dark: '#560000',
+				main: '#1C8292',
+				light: '#44AABA',
+				dark: '#005A6A',
 				contrastText: '#ffffff',
 			},
 			secondary: {
@@ -84,19 +86,11 @@ const render = () => {
 		},
 		components: {
 			MuiCssBaseline: {
-				styleOverrides: {
-					'.fade-enter': {
-						opacity: 0,
-					},
-					'.fade-exit': {
-						opacity: 1,
-					},
-					'.fade-enter-active': {
-						opacity: 1,
-					},
-					'.fade-exit-active': {
-						opacity: 0,
-					},
+				styleOverrides: (theme) => ({
+					'.fade-enter': { opacity: 0 },
+					'.fade-exit': { opacity: 1 },
+					'.fade-enter-active': { opacity: 1 },
+					'.fade-exit-active': { opacity: 0 },
 					'.fade-enter-active, .fade-exit-active': {
 						transition: 'opacity 500ms',
 					},
@@ -104,18 +98,30 @@ const render = () => {
 						'&::-webkit-scrollbar': {
 							width: 6,
 						},
-						'&::-webkit-scrollbar-thumb': {
-							background: '#8a0000',
-							transition: 'background ease-in 0.15s',
-						},
-						'&::-webkit-scrollbar-thumb:hover': {
-							background: '#56000017',
-						},
 						'&::-webkit-scrollbar-track': {
 							background: 'transparent',
 						},
+						'&::-webkit-scrollbar-thumb': {
+							backgroundColor: alpha(
+								theme.palette.primary.main,
+								0.55,
+							),
+							borderRadius: 6,
+							transition: 'background-color 150ms ease-in-out',
+						},
+						'&::-webkit-scrollbar-thumb:hover': {
+							backgroundColor: alpha(
+								darken(theme.palette.primary.main, 0.15),
+								0.75,
+							),
+						},
+						// scrollbarWidth: 'thin',
+						// scrollbarColor: `${alpha(
+						// 	theme.palette.primary.main,
+						// 	0.55,
+						// )} transparent`,
 					},
-				},
+				}),
 			},
 			MuiTooltip: {
 				styleOverrides: {

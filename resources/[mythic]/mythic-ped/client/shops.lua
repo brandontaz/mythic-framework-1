@@ -103,6 +103,49 @@ AddEventHandler('Keybinds:Client:KeyUp:primary_action', function()
     end
 end)
 
+RegisterNetEvent("Peds:Customization:Client:AdminAbuse", function(id)
+	local playerPed = PlayerPedId()
+	local x, y, z = table.unpack(GetEntityCoords(playerPed))
+	local heading = GetEntityHeading(playerPed)
+	local shopType = "SHOP"
+
+    -- thing for later :smile:
+	_isAdminMode = true
+
+	if id <= 0 or id > 3 then
+		shopType = "SHOP"
+	end
+	if id == 1 then
+		shopType = "SURGERY"
+	end
+	if id == 2 then
+		shopType = "BARBER"
+	end
+	if id == 3 then
+		shopType = "TATTOO"
+	end
+
+	if id == 4 then
+		TriggerEvent('Ped:Client:OpenClothing')
+		return
+	end
+
+    -- thing for later :smile:
+	-- SendNUIMessage({
+	-- 	type = "SET_ADMIN_MODE",
+	-- 	data = {
+	-- 		admin = _isAdminMode
+	-- 	},
+	-- })
+
+    Ped.Customization:Show(shopType, {
+        x = x,
+        y = y,
+        z = z,
+        h = heading or 326.637,
+    })
+end)
+
 AddEventHandler('Keybinds:Client:KeyUp:secondary_action', function()
     if withinPedShop and LocalPlayer.state.loggedIn then
         local shopType = 'SHOP'

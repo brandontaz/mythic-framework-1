@@ -334,7 +334,7 @@ RegisterNUICallback("GetNumberOfPedDrawableVariations", function(data, cb)
 
 	local gender = LocalPlayer.state.Character:GetData("Gender")
 	local comps = {}
-	for i = 0, GetNumberOfPedDrawableVariations(PlayerPedId(), data.componentId) do
+	for i = 0, GetNumberOfPedDrawableVariations(PlayerPedId(), data.componentId) - 1 do
 		if
 			GlobalState["ClothingStoreHidden"].components[data.componentId] == nil
 			or GlobalState["ClothingStoreHidden"].props[data.componentId][gender] == nil
@@ -371,7 +371,7 @@ RegisterNUICallback("GetNumberOfPedPropDrawableVariations", function(data, cb)
 
 	local gender = LocalPlayer.state.Character:GetData("Gender")
 	local comps = {}
-	for i = 0, GetNumberOfPedPropDrawableVariations(PlayerPedId(), data.componentId) do
+	for i = 0, GetNumberOfPedPropDrawableVariations(PlayerPedId(), data.componentId) - 1 do
 		if
 			GlobalState["ClothingStoreHidden"].components[data.componentId] == nil
 			or GlobalState["ClothingStoreHidden"].props[data.componentId][gender] == nil

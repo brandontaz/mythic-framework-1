@@ -1,0 +1,5 @@
+RegisterNUICallback("CityServices:GetBusinesses", function(data, cb)
+	Callbacks:ServerCallback("Phone:CityServices:GetBusinesses", {}, function(businesses)
+		cb(businesses or {})
+	end)
+end)

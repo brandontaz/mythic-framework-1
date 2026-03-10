@@ -179,4 +179,99 @@ function RegisterCommands()
 			},
 		}
 	)
+	Chat:RegisterCommand(
+		"rto",
+		function(source, args, rawCommand)
+			local message = rawCommand:sub(5)
+			if message ~= nil then
+				message = message:gsub("^%s+", "")
+			end
+
+			if not message or #message <= 0 then
+				Chat.Send.System:Single(source, "You must provide a message to send")
+				return
+			end
+
+			local plyr = Fetch:Source(source)
+			if plyr == nil then
+				return
+			end
+
+			local char = plyr:GetData("Character")
+			if char == nil then
+				return
+			end
+
+			local callsign = char:GetData("Callsign")
+			local officerLabel = string.format("%s %s", char:GetData("First"), char:GetData("Last"))
+			if callsign ~= nil and tostring(callsign) ~= "" then
+				officerLabel = string.format("%s [%s]", officerLabel, callsign)
+			end
+
+			local formattedMessage = message:gsub("\n", "<br />")
+			local chatMessage = string.format("<strong>[RTO]</strong> %s<br />%s", officerLabel, formattedMessage)
+
+			for _, v in pairs(Fetch:All()) do
+				local targetSrc = v:GetData("Source")
+				if targetSrc ~= nil then
+					local duty = Player(targetSrc).state.onDuty
+					if duty == "police" then
+						TriggerClientEvent("chat:addMessage", targetSrc, {
+							time = os.time(),
+							type = "dispatch",
+							message = chatMessage,
+						})
+					end
+				end
+			end
+
+                                        local function sendAlert(location)
+                                                if EmergencyAlerts ~= nil then
+                                                        local alertDetails = { officerLabel }
+
+                                                        EmergencyAlerts:Create(
+                                                                        "RTO",
+                                                                        "RTO Announcement",
+                                                                        1,
+                                                                        location or false,
+                                                                        {
+                                                                                        icon = "broadcast-tower",
+                                                                                        details = table.concat(alertDetails, "\n"),
+                                                                        },
+                                                                        false,
+                                                                        false,
+                                                                        1
+                                                        )
+                                                end
+                                        end
+
+					local ped = GetPlayerPed(source)
+					if ped ~= 0 then
+						local coords = GetEntityCoords(ped)
+						if coords ~= nil and Callbacks ~= nil then
+							Callbacks:ClientCallback(source, "EmergencyAlerts:GetStreetName", coords, function(location)
+								sendAlert(location)
+							end)
+							return
+						end
+					end
+
+					sendAlert(false)
+		end,
+		{
+			help = "Send an RTO announcement to on-duty officers",
+			params = {
+				{
+					name = "Message",
+					help = "The announcement you want to send",
+				},
+			},
+		},
+		-1,
+		{
+			{
+				Id = "police",
+			},
+		}
+	)
 end

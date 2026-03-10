@@ -1,5 +1,5 @@
 export const initialState = {
-    showing: false,
+    showing: process.env.NODE_ENV === 'production' ? false : true,
     config: {
         statusIcons: true,
         statusNumbers: false,

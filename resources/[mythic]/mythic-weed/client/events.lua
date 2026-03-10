@@ -4,7 +4,7 @@ RegisterNetEvent("Weed:Client:Login", function(l)
 	PedInteraction:Add("weed-dealer", `s_m_y_dealer_01`, vector3(l.coords.x, l.coords.y, l.coords.z), l.heading, 50.0, {
 		{
 			icon = "cannabis",
-			text = "Buy Package",
+			text = "Purchase Package",
 			event = "Weed:Client:Package",
 		},
 		-- {
@@ -19,7 +19,7 @@ RegisterNetEvent("Weed:Client:Login", function(l)
 		-- },
 		{
 			icon = "9",
-			text = "Sign In",
+			text = "Start Run",
 			event = "WeedRun:Client:Enable",
             data = {},
             isEnabled = function()
@@ -28,7 +28,7 @@ RegisterNetEvent("Weed:Client:Login", function(l)
 		},
 		{
 			icon = "9",
-			text = "Sign In",
+			text = "End Run",
 			event = "WeedRun:Client:Disabled",
             data = {},
             isEnabled = function()
@@ -55,13 +55,13 @@ AddEventHandler("Weed:Client:Check", function(entity, data)
 					description = type,
 				},
 				{
-					label = "Plant Growth",
+					label = "Growth Status",
 					description = string.format("Growth: %.2f%%", data.plant.growth),
 				},
 				{
-					label = "Soil Information",
+					label = "Soil Conditions",
 					description = string.format(
-						"<ul><li>Ground Type: %s</li><li>Water: %s</li><li>Nitrogen: %s</li><li>Phosphorus: %s</li><li>Potassium: %s</li></ul>",
+						"<ul><li>Ground Type: %s</li><li>Moisture: %s</li><li>Nitrogen: %s</li><li>Phosphorus: %s</li><li>Potassium: %s</li></ul>",
 						data.ground.label,
 						data.ground.water,
 						data.ground.nitrogen,
@@ -74,9 +74,9 @@ AddEventHandler("Weed:Client:Check", function(entity, data)
 			if data.plant.growth < 100 then
 				if data.plant.fertilizer ~= nil then
 					table.insert(items, {
-						label = "Fertilized",
+						label = "Fertilizer Applied",
 						description = string.format(
-							"Type: %s (+%s) Time Left: %s Minutes",
+							"Type: %s (+%s) Remaining Time: %s minutes",
 							data.plant.fertilizer.type,
 							data.plant.fertilizer.value,
 							data.plant.fertilizer.time
@@ -84,8 +84,8 @@ AddEventHandler("Weed:Client:Check", function(entity, data)
 					})
 				else
 					table.insert(items, {
-						label = "Not Fertilized",
-						description = "Click to fertilize plant",
+						label = "No Fertilizer Applied",
+						description = "Select to apply fertilizer.",
 						submenu = "fertilizer",
 					})
 				end
@@ -93,14 +93,14 @@ AddEventHandler("Weed:Client:Check", function(entity, data)
 				if data.plant.water < 95 then
 					table.insert(items, {
 						label = string.format("Water: %.2f%%", data.plant.water),
-						description = "Requires 1x Bottle of Water",
+						description = "Requires 1x Bottle of Water.",
 						event = "Weed:Client:Water",
 						data = GetWeedPlant(entity.entity),
 					})
 				else
 					table.insert(items, {
 						label = string.format("Water: %.2f%%", data.plant.water),
-						description = "Does Not Need Water",
+						description = "No water required at this time.",
 					})
 				end
 			end
@@ -115,8 +115,8 @@ AddEventHandler("Weed:Client:Check", function(entity, data)
 
 			local fertilizers = {
 				{
-					label = "About Fertilizer",
-					description = "Various fertilizers do different things.<br />Nitrogen: Increases possible output of plant.<br />Phosphorus: Increases Growth Per Tick.<br />Potassium: Increases Water Duration.",
+					label = "Fertilizer Overview",
+					description = "Each fertilizer type provides a different benefit.<br />Nitrogen: Increases potential yield.<br />Phosphorus: Increases growth rate.<br />Potassium: Improves water retention.",
 				},
 			}
 
@@ -127,8 +127,8 @@ AddEventHandler("Weed:Client:Check", function(entity, data)
 			if hasNitro or hasPhos or hasPotas then
 				if hasNitro then
 					table.insert(fertilizers, {
-						label = "Fertilize Plant (Nitrogen)",
-						description = "Requires 1x Fertilizer (Nitrogen)",
+						label = "Apply Fertilizer (Nitrogen)",
+						description = "Requires 1x Nitrogen Fertilizer.",
 						event = "Weed:Client:Fertilize",
 						data = { id = GetWeedPlant(entity.entity), type = "nitrogen" },
 					})
@@ -136,8 +136,8 @@ AddEventHandler("Weed:Client:Check", function(entity, data)
 
 				if hasPhos then
 					table.insert(fertilizers, {
-						label = "Fertilize Plant (Phosphorus)",
-						description = "Requires 1x Fertilizer (Phosphorus)",
+						label = "Apply Fertilizer (Phosphorus)",
+						description = "Requires 1x Phosphorus Fertilizer.",
 						event = "Weed:Client:Fertilize",
 						data = { id = GetWeedPlant(entity.entity), type = "phosphorus" },
 					})
@@ -145,15 +145,15 @@ AddEventHandler("Weed:Client:Check", function(entity, data)
 
 				if hasPotas then
 					table.insert(fertilizers, {
-						label = "Fertilize Plant (Potassium)",
-						description = "Requires 1x Fertilizer (Potassium)",
+						label = "Apply Fertilizer (Potassium)",
+						description = "Requires 1x Potassium Fertilizer.",
 						event = "Weed:Client:Fertilize",
 						data = { id = GetWeedPlant(entity.entity), type = "potassium" },
 					})
 				end
 			else
 				table.insert(fertilizers, {
-					label = "You Don't Have Any Fertilizer",
+					label = "No fertilizer available.",
 				})
 			end
 			
@@ -173,21 +173,21 @@ AddEventHandler("Weed:Client:Check", function(entity, data)
 					items = fertilizers,
 				},
 				deleteConfirm = {
-					label = "Destroy Plant?",
+					label = "Confirm Destruction",
 					items = {
 						{
-							label = "Are You Sure?",
-							description = "Destroying this plant is irreversible and you will not receive anything from this plant. Are you absolutely sure you want to do this?",
+							label = "Confirmation Required",
+							description = "This action is irreversible and you will not receive any items from this plant. Do you want to proceed?",
 						},
 						{
-							label = "Yes",
-							description = "Destroy This Plant",
+							label = "Confirm",
+							description = "Destroy Plant",
 							event = "Weed:Client:Destroy",
 							data = GetWeedPlant(entity.entity),
 						},
 						{
-							label = "No",
-							description = "Do Not Destroy This Plant",
+							label = "Cancel",
+							description = "Cancel and keep the plant.",
 							submenu = "main",
 						},
 					},
@@ -204,7 +204,7 @@ AddEventHandler("Weed:Client:Fertilize", function(data)
 		Progress:Progress({
 			name = "fertilize_weed",
 			duration = 15000,
-			label = "Fertilizing",
+			label = "Applying Fertilizer",
 			canCancel = true,
 			controlDisables = {
 				disableMovement = true,
@@ -223,7 +223,7 @@ AddEventHandler("Weed:Client:Fertilize", function(data)
 			end
 		end)
 	else
-		Notification:Error("You Don't Have Fertilizer")
+		Notification:Error("You do not have the required fertilizer.")
 	end
 end)
 
@@ -233,7 +233,7 @@ AddEventHandler("Weed:Client:Water", function(pId)
 		Progress:Progress({
 			name = "water_weed",
 			duration = 6000,
-			label = "Watering",
+			label = "Watering Plant",
 			canCancel = true,
 			controlDisables = {
 				disableMovement = true,
@@ -258,7 +258,7 @@ AddEventHandler("Weed:Client:Harvest", function(entity, data)
 	Progress:Progress({
 		name = "harvest_weed",
 		duration = 6000,
-		label = "Harvesting",
+		label = "Harvesting Plant",
 		canCancel = true,
 		controlDisables = {
 			disableMovement = true,
@@ -281,9 +281,9 @@ end)
 AddEventHandler("Weed:Client:Harvest2", function(nId)
 	ListMenu:Close()
 	Progress:Progress({
-		name = "harvest_weed",
+		name = "harvest_weed2",
 		duration = 6000,
-		label = "Harvesting",
+		label = "Harvesting Plant",
 		canCancel = true,
 		controlDisables = {
 			disableMovement = true,
@@ -313,9 +313,9 @@ end)
 
 AddEventHandler("Weed:Client:Destroy", function(nId)
 	Progress:Progress({
-		name = "destroy_weed",
+		name = "destroy_plant",
 		duration = 8000,
-		label = "Destroying",
+		label = "Destroying Plant",
 		canCancel = true,
 		controlDisables = {
 			disableMovement = true,
@@ -337,9 +337,9 @@ end)
 
 AddEventHandler("Weed:Client:PDDestroy", function(entity)
 	Progress:Progress({
-		name = "harvest_weed",
+		name = "destroy_plant_pd",
 		duration = 4000,
-		label = "Destroying",
+		label = "Destroying Plant",
 		canCancel = true,
 		controlDisables = {
 			disableMovement = true,

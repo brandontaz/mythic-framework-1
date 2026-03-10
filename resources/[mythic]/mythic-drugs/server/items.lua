@@ -7,6 +7,10 @@ function RegisterItemUse()
 	Inventory.Items:RegisterUse("meth_table", "DrugShit", function(source, slot, itemData)
 		Callbacks:ClientCallback(source, "Drugs:Meth:PlaceTable", slot.id, function() end)
 	end)
+	
+	Inventory.Items:RegisterUse("adv_meth_table", "DrugShit", function(source, slot, itemData)
+		Callbacks:ClientCallback(source, "Drugs:Meth:PlaceTable", slot.id, function() end)
+	end)
 
 	Inventory.Items:RegisterUse("meth_pipe", "DrugShit", function(source, slot, itemData)
 		local plyr = Fetch:Source(source)

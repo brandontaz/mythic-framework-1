@@ -1,5 +1,25 @@
 local cam = nil
 
+local foTo = 0
+function FadeOutWithTimeout(time, timeOut)
+    DoScreenFadeOut(time or 500)
+    foTo = 0
+    while IsScreenFadingOut() and foTo < (timeOut or 3000) do
+        foTo = foTo + 1
+        Wait(1)
+    end
+end
+
+local fiTo = 0
+function FadeInWithTimeout(time, timeOut)
+    DoScreenFadeIn(time or 500)
+    fiTo = 0
+    while IsScreenFadingIn() and fiTo < (timeOut or 3000) do
+        fiTo = fiTo + 1
+        Wait(1)
+    end
+end
+
 Spawn = {
     Choosing = true,
     InitCamera = function(self)

@@ -265,7 +265,7 @@ export default connect(null, {
 
 	const config = [
 		{
-			regex: /^https?:\/\/(\w+\.)?imgur.com\/(\w*\d\w*)+(\.[a-zA-Z]{3})?$/gim,
+			regex: /^https?:\/\/(\w+\.)?cdn.discordapp.com\/(\w*\d\w*)+(\.[a-zA-Z]{3})?$/gim,
 			fn: (key, result) => (
 				<CopyToClipboard
 					text={result[0]}

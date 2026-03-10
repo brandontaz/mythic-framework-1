@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
 		gridTemplateColumns: '100%',
 		justifyContent: 'space-between',
 		margin: 25,
-		background: theme.palette.secondary.light,
-		border: `2px solid ${theme.palette.border.divider}`,
+		// background: theme.palette.secondary.light,
+		// border: `2px solid ${theme.palette.border.divider}`,
 		'&.advanced': {
 			gridTemplateColumns: '50% 50%',
 		},
